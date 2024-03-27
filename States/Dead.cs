@@ -23,6 +23,7 @@ public class Dead : State
     public override void EnterState()
     {
         gravity = 10;
+        Debug.Log("Oh man you died");
     }
 
     public override void UpdateState()

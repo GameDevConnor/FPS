@@ -37,12 +37,12 @@ using UnityEngine;
 
     private void OnCollisionEnter(Collision hit)
     {
-        StateMachine thrown = hit.collider.GetComponent<StateMachine>();
-        if (thrown != null && canHit)
+        StateMachine thrownPlayer = hit.collider.GetComponent<StateMachine>();
+        if (thrownPlayer != null && canHit)
         {
             Debug.Log(hit.relativeVelocity.magnitude);
 
-            thrown.health -= CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass);
+            thrownPlayer.health -= CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass);
 
             StartCoroutine(cooldown());
 
@@ -51,7 +51,22 @@ using UnityEngine;
             //            Debug.Log("YOWCH!!" + hit.gameObject.name);
             //        }
         }
-        
+
+        Target thrownTarget = hit.collider.GetComponent<Target>();
+        if (thrownTarget != null && canHit)
+        {
+            Debug.Log(hit.relativeVelocity.magnitude);
+
+            thrownTarget.health -= CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass);
+
+            StartCoroutine(cooldown());
+
+            //if (Mathf.Abs(hit.relativeVelocity.magnitude) >= thresholdVelocity)
+            //        {
+            //            Debug.Log("YOWCH!!" + hit.gameObject.name);
+            //        }
+        }
+
     }
 
     private IEnumerator cooldown()

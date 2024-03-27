@@ -16,6 +16,14 @@ public abstract class State : MonoBehaviour
 
     }
 
+    public void Update()
+    {
+        if (player.health <= 0)
+        {
+            SwitchState(factory.Dead());
+        }
+    }
+
     public State(StateMachine machine, StateFactory factory)
     {
         this.machine = machine;

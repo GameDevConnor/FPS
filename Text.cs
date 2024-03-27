@@ -28,10 +28,12 @@ public class Text : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        healthText.text = playerHealth.health + "/100";
+        healthText.text = playerHealth.health + "";
+
+        CameraControl playerCam = player.transform.GetComponent<CameraControl>();
 
 
-        if (player.grabbing == false)
+        if (playerCam != null && playerCam.grabbing == false)
         {
             grabText.text = pickup;
             leftText.enabled = false;

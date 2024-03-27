@@ -20,6 +20,9 @@ public class StateMachine : MonoBehaviour
     public float Force;
 
 
+    public Inventory inventory;
+
+
 
     void Awake()
     {
