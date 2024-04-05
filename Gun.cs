@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class Gun : Weapons
 {
 
     public Camera camera;
@@ -31,6 +31,14 @@ public class Gun : MonoBehaviour
 
     public int bullets;
 
+    public Animator animator;
+
+    public float recoilTime;
+
+    public float recoilX;
+    public float recoilY;
+    public CameraControl playerCam;
+
 
 
     // Start is called before the first frame update
@@ -42,15 +50,26 @@ public class Gun : MonoBehaviour
     private void OnEnable()
     {
         canReload = true;
+        canShoot = false;
         canShoot = true;
+        animator.SetBool("Reloading", false);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        CameraControl playerCam = camera.transform.GetComponent<CameraControl>();
 
+        playerCam = camera.transform.GetComponent<CameraControl>();
 
+        if (playerCam.grabbing)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+        }
 
         if ((magazine == 0 || Input.GetKeyDown(KeyCode.R)) && canReload)
         {
@@ -60,27 +79,37 @@ public class Gun : MonoBehaviour
 
         if (semiAuto)
         {
-            if (Input.GetButtonDown("Fire1") && !playerCam.grabbing && Time.time >= nextTimetoFire && canShoot)
-            {
-                nextTimetoFire = Time.time + 1 / rateOfFire;
-                if (shotgun)
+            
+                if (Input.GetButtonDown("Fire1") && !playerCam.grabbing && Time.time >= nextTimetoFire && canShoot)
                 {
-                    ShootShotgun(bullets);
+                    nextTimetoFire = Time.time + 1 / rateOfFire;
+                    if (shotgun)
+                    {
+                        ShootShotgun(bullets);
+                    StartCoroutine(recoil());
                 }
-                else
-                {
-                    Shoot();
+                    else
+                    {
+                        Shoot();
+                    StartCoroutine(recoil());
+
                 }
-                
+
             }
+            
+            
         }
         else
         {
-            if (Input.GetButton("Fire1") && !playerCam.grabbing && Time.time >= nextTimetoFire && canShoot)
-            {
+            
+           if (Input.GetButton("Fire1") && !playerCam.grabbing && Time.time >= nextTimetoFire && canShoot)
+           {
                 nextTimetoFire = Time.time + 1 / rateOfFire;
                 Shoot();
-            }
+                StartCoroutine(recoil());
+
+           }
+
         }
 
         
@@ -89,10 +118,14 @@ public class Gun : MonoBehaviour
     void Shoot()
     {
 
+        recoilX = Random.Range(-0.1f, 0.1f);
+
         float x = Random.Range(-spread, spread);
         float y = Random.Range(-spread, spread);
+        float z = Random.Range(-spread, spread);
 
-        Vector3 shootDirection = camera.transform.forward + new Vector3(x, y, 0);
+        Vector3 shootDirection = camera.transform.forward + new Vector3(x, y, z);
+        //Debug.Log("shootDirection: " + shootDirection + ", camera: " + camera.transform.forward);
 
 
         muzzleFlash.Play();
@@ -101,6 +134,8 @@ public class Gun : MonoBehaviour
         {
             //Debug.Log(hit.transform.name);
             Hittable hittable = hit.transform.GetComponent<Hittable>();
+            Destructable destructable = hit.transform.GetComponent<Destructable>();
+
 
             if (hittable != null)
             {
@@ -112,24 +147,36 @@ public class Gun : MonoBehaviour
                 hit.rigidbody.AddForce(-hit.normal * force);
             }
 
+            if (destructable != null)
+            {
+                destructable.Hit(damage);
+            }
+
             GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impact, 2f);
         }
 
         magazine--;
+
+        playerCam.player.Rotate(Vector3.up * recoilX);
+
+        playerCam.xRotation -= recoilY;
+
     }
 
 
     void ShootShotgun(int bullets)
     {
+        recoilX = Random.Range(-0.1f, 0.1f);
+
 
         for (int i = 0; i < bullets; i++)
         {
             float x = Random.Range(-spread, spread);
             float y = Random.Range(-spread, spread);
+            float z = Random.Range(-spread, spread);
 
-            Vector3 shootDirection = camera.transform.forward + new Vector3(x, y, 0);
-
+            Vector3 shootDirection = camera.transform.forward + new Vector3(x, y, z);
 
             muzzleFlash.Play();
             RaycastHit hit;
@@ -137,6 +184,7 @@ public class Gun : MonoBehaviour
             {
                 //Debug.Log(hit.transform.name);
                 Hittable hittable = hit.transform.GetComponent<Hittable>();
+                Destructable destructable = hit.transform.GetComponent<Destructable>();
 
                 if (hittable != null)
                 {
@@ -148,6 +196,11 @@ public class Gun : MonoBehaviour
                     hit.rigidbody.AddForce(-hit.normal * force);
                 }
 
+                if (destructable != null)
+                {
+                    destructable.Hit(damage);
+                }
+
                 GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(impact, 2f);
             }
@@ -155,13 +208,41 @@ public class Gun : MonoBehaviour
         }
         magazine--;
 
+        playerCam.player.Rotate(Vector3.up * recoilX);
+
+        playerCam.xRotation -= recoilY;
+
+    }
+
+    public IEnumerator recoil()
+    {
+        canShoot = false;
+        canReload = false;
+
+        animator.SetBool("Shot", true);
+
+        // There is a bit of a transition in delay. By default it's 0.25 seconds
+        //yield return new WaitForSeconds(nextTimetoFire - 0.25f);
+        yield return new WaitForSeconds(recoilTime);
+
+        // There is a bit of a transition in delay. By default it's 0.25 seconds
+        animator.SetBool("Shot", false);
+        // This is a workaround
+        //yield return new WaitForSeconds(0.25f);
+
+        canReload = true;
+        canShoot = true;
     }
 
     public IEnumerator reload()
     {
         canShoot = false;
         canReload = false;
-        yield return new WaitForSeconds(reloadTime);
+
+        animator.SetBool("Reloading", true);
+
+        // There is a bit of a transition in delay. By default it's 0.25 seconds
+        yield return new WaitForSeconds(reloadTime - 0.25f);
 
         if (total > fullMagazine - magazine)
         {
@@ -173,6 +254,12 @@ public class Gun : MonoBehaviour
             magazine += total;
             total = 0;
         }
+
+        // There is a bit of a transition in delay. By default it's 0.25 seconds
+        animator.SetBool("Reloading", false);
+        // This is a workaround
+        yield return new WaitForSeconds(0.25f);
+
         canReload = true;
         canShoot = true;
     }

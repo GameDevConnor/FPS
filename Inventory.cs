@@ -5,9 +5,13 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
 
-    public Gun[] guns;
+    public Weapons[] guns;
 
     public int selection;
+    public Camera camera;
+
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +22,8 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         selection = Mathf.Clamp(selection, 0, guns.Length - 1);
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
@@ -52,15 +58,20 @@ public class Inventory : MonoBehaviour
 
     void activeGun(int selection)
     {
-        for (int i = 0; i < guns.Length; i++)
+        CameraControl playerCam = camera.transform.GetComponent<CameraControl>();
+
+        if (!playerCam.grabbing)
         {
-            if (i == selection)
+            for (int i = 0; i < guns.Length; i++)
             {
-                guns[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                guns[i].gameObject.SetActive(false);
+                if (i == selection)
+                {
+                    guns[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    guns[i].gameObject.SetActive(false);
+                }
             }
         }
     }

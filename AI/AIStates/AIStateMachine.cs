@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class StateMachine : MonoBehaviour
+public class AIStateMachine : MonoBehaviour
 {
     // Start is called before the first frame update
 
 
-    public State currentState;
+    public AIState currentState;
 
     public int health = 100;
 
-    [HideInInspector]
-    public CharacterController controller;
+    //public CharacterController controller;
     public Vector3 velocity;
 
     public bool isGrounded;
@@ -22,37 +22,38 @@ public class StateMachine : MonoBehaviour
 
     public Inventory inventory;
 
+    public AIMove aimove;
+
+
+
 
 
     void Awake()
     {
-        controller = FindObjectOfType<CharacterController>();
+        //controller = FindObjectOfType<CharacterController>();
 
-        StateFactory factory = new StateFactory(this);
+        AIStateFactory factory = new AIStateFactory(this);
 
-        currentState = factory.Falling();
+        currentState = factory.Guard();
 
         currentState.EnterState();
+
+        aimove = GetComponent<AIMove>();
 
     }
 
     private void Update()
     {
-        isGrounded = controller.isGrounded;
-        velocity = controller.velocity;
+        //isGrounded = controller.isGrounded;
+        //velocity = controller.velocity;
         currentState.UpdateState();
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
 
     }
 
 
 
 
-    public void SwitchState(State state)
+    public void SwitchState(AIState state)
     {
         currentState = state;
         currentState.EnterState();

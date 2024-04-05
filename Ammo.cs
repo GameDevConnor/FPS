@@ -6,7 +6,7 @@ using TMPro;
 public class Ammo : MonoBehaviour
 {
 
-    public Gun gun;
+    public Weapons weapon;
     public TextMeshProUGUI ammo;
     public Inventory inventory;
     // Start is called before the first frame update
@@ -18,7 +18,20 @@ public class Ammo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gun = inventory.guns[inventory.selection];
-        ammo.text = gun.magazine + "/" + gun.total;
+        weapon = inventory.guns[inventory.selection];
+        Gun gun = weapon.GetComponent<Gun>();
+        Thrower thrower = weapon.GetComponent<Thrower>();
+        if (gun != null)
+        {
+            ammo.text = gun.magazine + "/" + gun.total;
+        }
+        else if (thrower != null)
+        {
+            ammo.text = "" + thrower.total;
+        }
+        else
+        {
+            ammo.text = "";
+        }
     }
 }

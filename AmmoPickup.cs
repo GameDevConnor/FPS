@@ -28,8 +28,13 @@ public class AmmoPickup : MonoBehaviour
             {
                 if (type.Equals(inventory.guns[i].name))
                 {
-                    inventory.guns[i].total += amount;
-                    Destroy(gameObject);
+                    Gun gun = inventory.guns[i].GetComponent<Gun>();
+                    if (gun != null)
+                    {
+                        gun.total += amount;
+                        Destroy(gameObject);
+                    }
+                    
                 }
             }
         }

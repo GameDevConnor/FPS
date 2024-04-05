@@ -7,7 +7,7 @@ public class CameraControl : MonoBehaviour
 
     public float sensitivity = 100f;
     public Transform player;
-    float xRotation = 0f;
+    public float xRotation = 0f;
     public float range = 5f;
     public bool grabbing;
     public bool canPressE;
@@ -15,6 +15,8 @@ public class CameraControl : MonoBehaviour
     public float carrySpeed;
 
     public Rigidbody rb;
+
+    public float mouseY;
 
 
     // Start is called before the first frame update
@@ -29,7 +31,9 @@ public class CameraControl : MonoBehaviour
     {
         canPressE = true;
         float mouseX = Input.GetAxis("Mouse X") * sensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+        //float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+        mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+
 
         player.Rotate(Vector3.up * mouseX);
 
@@ -38,29 +42,6 @@ public class CameraControl : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -89f, 89f);
 
         transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-
-        //if (Input.GetKeyDown(KeyCode.E) && grabbing == false && canPressE)
-        //{
-        //    RaycastHit grab;
-        //    bool grabTarget = Physics.Raycast(transform.position, transform.forward, out grab, range);
-        //    Debug.DrawRay(transform.position, transform.forward * range, Color.red, range);
-        //    Ray ray = new Ray(transform.position, transform.forward);
-        //    Vector3 endOfRay = ray.GetPoint(range);
-
-        //    if (grabTarget)
-        //    {
-        //        Pickup pickUp = grab.transform.GetComponent<Pickup>();
-        //        Rigidbody rb = grab.transform.GetComponent<Rigidbody>();
-
-        //        if (pickUp != null)
-        //        {
-        //            grabbing = true;
-        //            PickUp();
-        //            canPressE = false;
-        //        }
-        //    }
-        //}
-
 
         RaycastHit grab;
         bool grabTarget = Physics.Raycast(transform.position, transform.forward, out grab, range);
@@ -76,7 +57,6 @@ public class CameraControl : MonoBehaviour
             if (grabTarget)
             {
                 Pickup pickUp = grab.transform.GetComponent<Pickup>();
-                //rb = grab.transform.GetComponent<Rigidbody>();
 
                 if (pickUp != null)
                 {
