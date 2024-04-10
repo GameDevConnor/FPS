@@ -34,10 +34,15 @@ public class InRange : AIState
         }
 
 
-        if (machine.health <= (machine.maxHealth / 2))
+        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance))
         {
 
             SwitchState(factory.Retreat());
+        }
+
+        if (machine.aimove.hivemind.lastManStanding)
+        {
+            SwitchState(factory.Pursuit());
         }
     }
 

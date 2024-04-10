@@ -35,6 +35,8 @@ public abstract class State : MonoBehaviour
 
     public void SwitchState(State newState)
     {
+        Destroy(machine.currentState);
+
         machine.currentState = newState;
         newState.EnterState();
     }

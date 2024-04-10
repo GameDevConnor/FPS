@@ -45,6 +45,11 @@ public class Guard : AIState
             SwitchState(factory.Retreat());
         }
 
+        if (machine.aimove.hivemind.lastManStanding)
+        {
+            SwitchState(factory.Pursuit());
+        }
+
         machine.aimove.setDestination();
         
     }

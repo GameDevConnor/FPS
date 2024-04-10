@@ -32,6 +32,11 @@ public class Pursuit : AIState
             SwitchState(factory.Retreat());
         }
 
+        if (machine.aimove.hivemind.lastManStanding)
+        {
+            SwitchState(factory.Pursuit());
+        }
+
 
         machine.aimove.setDestination(player.transform);
 

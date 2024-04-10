@@ -39,6 +39,10 @@ public class Retreat : AIState
             }
         }
 
+        if (machine.aimove.hivemind.lastManStanding)
+        {
+            SwitchState(factory.Pursuit());
+        }
 
 
 

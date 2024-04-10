@@ -35,6 +35,7 @@ public abstract class AIState : MonoBehaviour
 
     public void SwitchState(AIState newState)
     {
+        Destroy(machine.currentState);
         machine.currentState = newState;
         newState.EnterState();
     }
