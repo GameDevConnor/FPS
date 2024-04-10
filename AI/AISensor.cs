@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,8 +57,8 @@ public class AISensor : MonoBehaviour
         }
 
 
-       
-    }
+
+}
 
     private void Scan()
     {
@@ -81,6 +82,7 @@ public class AISensor : MonoBehaviour
 
 
         hearingObjects.Clear();
+        
         for (int i = 0; i < hearingCount; i++) // How many of the objects in the sphere are actually in the line of sight
         {
             GameObject obj = hearingColliders[i].gameObject; // The gameObject of the collider that is in the colliders array
@@ -135,8 +137,9 @@ public class AISensor : MonoBehaviour
     public bool inSphere(GameObject compare)
     {
 
-        foreach (Collider collider in colliders)
+        for (int i = 0; i < count; i++)
         {
+            Collider collider = colliders[i];
             if (collider == null)
             {
                 return false;
@@ -173,8 +176,11 @@ public class AISensor : MonoBehaviour
     public bool inHearingSphere(GameObject compare)
     {
 
-        foreach (Collider collider in hearingColliders)
+        // What is happening is that when OverlapSphereNonAlloc() rescans, it doesn't clear the hearing colliders array, so it returns an integer amount, that integer being the number of objects it is scanning at that time. So when you do the i=0 for loop, it only goes up to what it is currently scanning. However, with the foreach loop, it's doing the whole array, but the player hasn't been overwritten from the array, so it's still seeing the player because it was a leftover from before. By replacing it with a regular for loop, we only go to what it sees in the moment.
+      
+        for (int i = 0; i < hearingCount; i++)
         {
+            Collider collider = hearingColliders[i];
             if (collider == null)
             {
                 return false;

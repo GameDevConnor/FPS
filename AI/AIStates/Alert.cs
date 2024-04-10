@@ -27,11 +27,11 @@ public class Alert : AIState
             SwitchState(factory.Pursuit());
         }
 
-        if (machine.aisensor.inFOV(player))
-        {
+        //if (machine.aisensor.inFOV(player))
+        //{
 
-            SwitchState(factory.Attacking());
-        }
+        //    SwitchState(factory.Attacking());
+        //}
 
 
         if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance))
