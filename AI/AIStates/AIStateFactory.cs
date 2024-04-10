@@ -40,4 +40,9 @@ public class AIStateFactory
     {
         return new AIDead(machine, this);
     }
+
+    public AIState Retreat()
+    {
+        return new Retreat(machine, this);
+    }
 }

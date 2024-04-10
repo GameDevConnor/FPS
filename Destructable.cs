@@ -6,6 +6,10 @@ public class Destructable : Prop
 {
     public GameObject destroyedVersion;
     public float health;
+    public CameraControl playerCam;
+    public Camera camera;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +19,8 @@ public class Destructable : Prop
     // Update is called once per frame
     void Update()
     {
+        playerCam = camera.transform.GetComponent<CameraControl>();
+
 
         if (health <= 0)
         {
@@ -26,7 +32,12 @@ public class Destructable : Prop
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.relativeVelocity.magnitude);
+        //Debug.Log(collision.relativeVelocity.magnitude);
+        if (collision.relativeVelocity.magnitude >= 10f && !playerCam.grabbing)
+        {
+            health -= 5f;
+        }
+
     }
 
     public void Hit(float damage)

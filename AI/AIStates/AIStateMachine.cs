@@ -10,26 +10,20 @@ public class AIStateMachine : MonoBehaviour
 
     public AIState currentState;
 
-    public int health = 100;
-
-    //public CharacterController controller;
-    public Vector3 velocity;
-
-    public bool isGrounded;
-
-    public float Force;
-
-
-    public Inventory inventory;
+    public int maxHealth = 100;
+    public int health;
 
     public AIMove aimove;
+    public AISensor aisensor;
 
 
+    public bool retreated;
 
 
 
     void Awake()
     {
+        //health = maxHealth;
         //controller = FindObjectOfType<CharacterController>();
 
         AIStateFactory factory = new AIStateFactory(this);
@@ -38,8 +32,15 @@ public class AIStateMachine : MonoBehaviour
 
         currentState.EnterState();
 
-        aimove = GetComponent<AIMove>();
+        //aimove = GetComponent<AIMove>();
+        //aisensor = GetComponent<AISensor>();
 
+}
+
+    private void Start()
+    {
+        aimove = GetComponent<AIMove>();
+        aisensor = GetComponent<AISensor>();
     }
 
     private void Update()

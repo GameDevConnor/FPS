@@ -4,16 +4,41 @@ using UnityEngine;
 
 public class InRange : AIState
 {
-    public AIMove aimove;
+
+    public GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+    public float range;
+
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+
+        Debug.Log("InRange");
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+        if (machine.aisensor.inSphere(player) && !machine.aisensor.inFOV(player))
+        {
+            SwitchState(factory.Pursuit());
+        }
+
+        if (!machine.aisensor.inSphere(player) && !machine.aisensor.inFOV(player))
+        {
+            SwitchState(factory.Guard());
+        }
+
+        if ((transform.position - player.transform.position).magnitude >= range)
+        {
+            SwitchState(factory.Attacking());
+        }
+
+
+        if (machine.health <= (machine.maxHealth / 2))
+        {
+
+            SwitchState(factory.Retreat());
+        }
     }
 
     public InRange(AIStateMachine machine, AIStateFactory factory) : base(machine, factory)
@@ -23,7 +48,6 @@ public class InRange : AIState
     // Start is called before the first frame update
     void Start()
     {
-        aimove = GetComponent<AIMove>();
 
     }
 

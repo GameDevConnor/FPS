@@ -6,7 +6,8 @@ using UnityEngine;
 public class AISensor : MonoBehaviour
 {
 
-    public float distance = 10;
+    public float distance = 10f;
+    public float hearingDistance;
     public float angle = 30;
     public float height = 1.0f;
     public Color color = Color.red;
@@ -14,8 +15,10 @@ public class AISensor : MonoBehaviour
 
     public int scanFrequency;
     public LayerMask layers;
-    Collider[] colliders = new Collider[50]; // Store the results from the Physics operation
+    public Collider[] colliders = new Collider[50]; // Store the results from the Physics operation */
+    public Collider[] hearingColliders = new Collider[50];
     int count; // Counting how many objects
+    int hearingCount;
     float scanInterval;
     float scanTimer;
     public List<GameObject> objects = new List<GameObject>(); // This will store objects within the sector rather than the whole sphere
@@ -25,23 +28,35 @@ public class AISensor : MonoBehaviour
 
 
     public float lineCastOffset;
-    
+
+
+    public List<GameObject> hearingObjects = new List<GameObject>();
+
 
     // Start is called before the first frame update
     void Start()
     {
         scanInterval = 1.0f / scanFrequency;
+
+        //colliders = new Collider[50];
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        hearingDistance = distance * 3f;
+
         scanTimer -= Time.deltaTime; // Time.deltaTime - The interval in seconds from the last frame to the current one. Subtraction will happen each frame
         if (scanTimer < 0)
         {
             scanTimer += scanInterval;
             Scan();
         }
+
+
+       
     }
 
     private void Scan()
@@ -49,6 +64,9 @@ public class AISensor : MonoBehaviour
         // Physics.OverlapSphere() returns an array with all the colliders touching or inside the sphere
         // Physics.OverlapSphereNonAlloc() returns the number of colliders stored in results buffer, a parameter in the method
         count = Physics.OverlapSphereNonAlloc(transform.position, distance, colliders, layers, QueryTriggerInteraction.Collide);
+
+        hearingCount = Physics.OverlapSphereNonAlloc(transform.position, hearingDistance, hearingColliders, layers, QueryTriggerInteraction.Collide);
+
 
         objects.Clear();
         for (int i = 0; i < count; i++) // How many of the objects in the sphere are actually in the line of sight
@@ -58,7 +76,21 @@ public class AISensor : MonoBehaviour
             {
                 objects.Add(obj);
             }
+            
         }
+
+
+        hearingObjects.Clear();
+        for (int i = 0; i < hearingCount; i++) // How many of the objects in the sphere are actually in the line of sight
+        {
+            GameObject obj = hearingColliders[i].gameObject; // The gameObject of the collider that is in the colliders array
+            if (isInSight(obj))
+            {
+                hearingObjects.Add(obj);
+            }
+
+        }
+
     }
 
     public bool isInSight(GameObject obj)
@@ -92,6 +124,69 @@ public class AISensor : MonoBehaviour
 
 
         return true;
+    }
+
+
+    public bool exists()
+    {
+        return true;
+    }
+
+    public bool inSphere(GameObject compare)
+    {
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider == null)
+            {
+                return false;
+            }
+
+            if (collider.CompareTag(compare.tag))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool inFOV(GameObject compare)
+    {
+        foreach (GameObject collider in objects)
+        {
+            if (compare == null)
+            {
+                return false;
+            }
+
+            if (collider.CompareTag(compare.tag))
+            {
+                return true;
+
+            }
+        }
+
+        return false;
+    }
+
+    public bool inHearingSphere(GameObject compare)
+    {
+
+        foreach (Collider collider in hearingColliders)
+        {
+            if (collider == null)
+            {
+                return false;
+            }
+
+            if (collider.CompareTag(compare.tag))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     Mesh CreateMesh()
@@ -238,6 +333,11 @@ public class AISensor : MonoBehaviour
 
         Gizmos.DrawWireSphere(transform.position, distance); // Draw a sphere around the object
 
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, hearingDistance); // Draw a sphere around the object
+
+
+        Gizmos.color = color;
         for (int i = 0; i < count; i++)
         {
             Gizmos.DrawSphere(colliders[i].transform.position, 1.0f); // Draw a sphere around every object that is colliding with the sphere, as it is in the colliders array

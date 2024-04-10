@@ -4,16 +4,37 @@ using UnityEngine;
 
 public class Pursuit : AIState
 {
-    public AIMove aimove;
+
+    public GameObject player = GameObject.FindGameObjectWithTag("Player");
+
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Pursuit");
+        machine.retreated = true;
+
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+
+
+        if (machine.aisensor.inFOV(player))
+        {
+
+            SwitchState(factory.Attacking());
+        }
+
+
+        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance))
+        {
+
+            SwitchState(factory.Retreat());
+        }
+
+
+        machine.aimove.setDestination(player.transform);
+
     }
 
     public Pursuit(AIStateMachine machine, AIStateFactory factory) : base(machine, factory)
@@ -23,7 +44,6 @@ public class Pursuit : AIState
     // Start is called before the first frame update
     void Start()
     {
-        aimove = GetComponent<AIMove>();
 
     }
 

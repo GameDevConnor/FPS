@@ -134,4 +134,48 @@ public class Graph : MonoBehaviour
             return shortestEdge.getVertex2();
         }
     }
+
+    public Vertex returnShortestLengthYESOccupiedEnemy(Vertex source)
+    {
+        Edge shortestEdge = new Edge(float.PositiveInfinity);
+        foreach (Edge edge in map[source])
+        {
+            if (edge.getWeight() < shortestEdge.getWeight() && edge.getVertex2().getOccupiedEnemy())
+            {
+                shortestEdge = edge;
+            }
+        }
+
+        if (shortestEdge.getWeight() >= float.PositiveInfinity)
+        {
+            return source;
+        }
+        else
+        {
+            return shortestEdge.getVertex2();
+        }
+    }
+
+    public Vertex returnShortestLengthFromPosition(Transform source)
+    {
+        Vertex returnVertex = null;
+        float shortestDistance = float.PositiveInfinity;
+        foreach (Vertex vertex in map.Keys)
+        {
+
+            float distance = (source.position - vertex.transform.position).magnitude;
+
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                returnVertex = vertex;
+            }
+        }
+
+        //Debug.Log("Return Vertex: " + returnVertex);
+        return returnVertex;
+
+    }
+
+
 }

@@ -4,16 +4,42 @@ using UnityEngine;
 
 public class Attacking : AIState
 {
-    public AIMove aimove;
+
+    public GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+    public float range;
+
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Attacking");
+        machine.retreated = true;
+
+
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+        if (!machine.aisensor.inFOV(player))
+        {
+            SwitchState(factory.Pursuit());
+        }
+
+
+        if ((machine.transform.position - player.transform.position).magnitude <= range)
+        {
+            SwitchState(factory.InRange());
+        }
+
+
+        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance))
+        {
+
+            SwitchState(factory.Retreat());
+        }
+
+        machine.aimove.setDestination(player.transform);
+
     }
 
     public Attacking(AIStateMachine machine, AIStateFactory factory) : base(machine, factory)
@@ -23,7 +49,8 @@ public class Attacking : AIState
     // Start is called before the first frame update
     void Start()
     {
-        aimove = GetComponent<AIMove>();
+    
+
     }
 
     // Update is called once per frame

@@ -28,30 +28,27 @@ public class AIMove : MonoBehaviour
     void Update()
     {
 
-        if (!inPosition)
-        {
-            enemy.SetDestination(objective.transform.position);
-        }
-        else
-        {
-            Vertex vertexObjective = objective.GetComponent<Vertex>();
-
-            if (vertexObjective != null)
-            {
-                lastVisited = vertexObjective;
-                nextDestination = hivemind.graph.returnShortestLength(lastVisited);
-                objective = nextDestination.transform;
-            }
-
-        }
-
-
 
     }
 
     public void setPosition(bool position)
     {
         this.inPosition = position;
+    }
+
+    public void setObjective(Transform newObjective)
+    {
+        objective = newObjective;
+    }
+
+    public void setDestination()
+    {
+        enemy.SetDestination(objective.position);
+    }
+
+    public void setDestination(Transform newDestination)
+    {
+        enemy.SetDestination(newDestination.position);
     }
 
 
