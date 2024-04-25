@@ -38,15 +38,17 @@ public class StateMachine : MonoBehaviour
 
     private void Update()
     {
-        isGrounded = controller.isGrounded;
-        velocity = controller.velocity;
-        currentState.UpdateState();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!PauseMenu.isPaused)
         {
-            Application.Quit();
-        }
 
+
+
+            isGrounded = controller.isGrounded;
+            velocity = controller.velocity;
+            currentState.UpdateState();
+
+        }
     }
 
 

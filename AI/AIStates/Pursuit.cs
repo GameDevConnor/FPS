@@ -32,9 +32,14 @@ public class Pursuit : AIState
             SwitchState(factory.Retreat());
         }
 
-        if (machine.aimove.hivemind.lastManStanding)
+        //if (machine.aimove.hivemind.lastManStanding)
+        //{
+        //    SwitchState(factory.Pursuit());
+        //}
+
+        if (machine.health <= 0)
         {
-            SwitchState(factory.Pursuit());
+            SwitchState(factory.AIDead());
         }
 
 

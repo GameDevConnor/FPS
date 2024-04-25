@@ -10,8 +10,6 @@ public class AIMove : MonoBehaviour
 
     public Transform objective;
 
-    public Vertex lastVisited;
-    public Vertex nextDestination;
 
     [SerializeField]
     private bool inPosition;
@@ -48,6 +46,7 @@ public class AIMove : MonoBehaviour
 
     public void setDestination(Transform newDestination)
     {
+        setObjective(newDestination);
         enemy.SetDestination(newDestination.position);
     }
 

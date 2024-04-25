@@ -22,6 +22,15 @@ public class Vertex : MonoBehaviour
     {
         return this.occupiedPlayer;
     }
+
+    public void setOccupiedEnemy(bool occupied)
+    {
+        this.occupiedEnemy = occupied;
+    }
+    public void setOccupiedPlayer(bool occupied)
+    {
+        this.occupiedPlayer = occupied;
+    }
     // Start is called before the first frame update
     void Start()
     {

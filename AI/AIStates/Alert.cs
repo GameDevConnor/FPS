@@ -22,6 +22,11 @@ public class Alert : AIState
             SwitchState(factory.Guard());
         }
 
+        if (machine.health <= 0)
+        {
+            SwitchState(factory.AIDead());
+        }
+
         if (machine.aisensor.inSphere(player) && !machine.aisensor.inFOV(player))
         {
             SwitchState(factory.Pursuit());
@@ -41,10 +46,10 @@ public class Alert : AIState
         }
 
 
-        if (machine.aimove.hivemind.lastManStanding)
-        {
-            SwitchState(factory.Pursuit());
-        }
+        //if (machine.aimove.hivemind.lastManStanding)
+        //{
+        //    SwitchState(factory.Pursuit());
+        //}
 
         machine.aimove.setDestination(player.transform);
 

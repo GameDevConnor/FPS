@@ -23,7 +23,7 @@ public class AIDead : AIState
     public override void EnterState()
     {
         gravity = 10;
-        Debug.Log("Oh man you died");
+        Debug.Log("yo that guy died");
     }
 
     public override void UpdateState()
@@ -34,12 +34,12 @@ public class AIDead : AIState
 
         //if (!controller.isGrounded && controller.velocity.y < 0)
         //{
-            
+
         //}
 
         //if (controller.isGrounded && Input.GetKeyDown(KeyCode.Space))
         //{
-            
+
         //}
 
 
@@ -53,6 +53,6 @@ public class AIDead : AIState
 
         //controller.Move(move * Time.deltaTime);
 
-
+        machine.aimove.setDestination(machine.transform);
     }
 }

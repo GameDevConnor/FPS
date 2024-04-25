@@ -25,7 +25,14 @@ public class Retreat : AIState
 
         if (!machine.retreated)
         {
-            machine.aimove.objective = machine.aimove.hivemind.graph.returnShortestLengthYESOccupiedEnemy(machine.aimove.hivemind.graph.returnShortestLengthFromPosition(machine.transform)).transform;
+            //machine.aimove.objective = machine.aimove.hivemind.graph.returnShortestLengthYESOccupiedEnemy(machine.aimove.hivemind.graph.returnShortestLengthFromPosition(machine.transform)).transform;
+            //Debug.Log("Machine: " + machine != null);
+            //Debug.Log("AI Move: " + machine.aimove != null);
+            //Debug.Log("Hivemind: " + machine.aimove.hivemind != null);
+            //Debug.Log("Graph: " + machine.aimove.hivemind.graph != null);
+            //Debug.Log("Objective: " + machine.aimove.objective != null);
+
+            machine.aimove.objective = machine.aimove.hivemind.graph.returnShortestLengthYESOccupiedEnemy(machine.transform).transform;
             machine.aimove.setDestination();
         }
 
@@ -39,12 +46,15 @@ public class Retreat : AIState
             }
         }
 
-        if (machine.aimove.hivemind.lastManStanding)
+        //if (machine.aimove.hivemind.lastManStanding)
+        //{
+        //    SwitchState(factory.Pursuit());
+        //}
+
+        if (machine.health <= 0)
         {
-            SwitchState(factory.Pursuit());
+            SwitchState(factory.AIDead());
         }
-
-
 
     }
 

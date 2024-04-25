@@ -13,6 +13,8 @@ public class Hivemind : MonoBehaviour
     public bool lastManStanding;
 
     public Graph graph;
+
+    
     void Start()
     {
         graph = new Graph(vertices.Count, vertices);
@@ -54,5 +56,13 @@ public class Hivemind : MonoBehaviour
             }
         }
         return count;
+    }
+
+    public void moveIn(Transform announcer)
+    {
+        foreach (AIStateMachine enemy in squad)
+        {
+            enemy.aimove.setDestination(graph.returnShortestLengthNotOccupiedEnemy(announcer).transform);
+        }
     }
 }

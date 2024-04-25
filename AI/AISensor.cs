@@ -7,10 +7,10 @@ using UnityEngine;
 public class AISensor : MonoBehaviour
 {
 
-    public float distance = 10f;
+    public float distance = 30f;
     public float hearingDistance;
-    public float angle = 30;
-    public float height = 1.0f;
+    public float angle = 80;
+    public float height = 10.0f;
     public Color color = Color.red;
 
 
@@ -34,6 +34,9 @@ public class AISensor : MonoBehaviour
     public List<GameObject> hearingObjects = new List<GameObject>();
 
 
+    public bool inFov;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +49,8 @@ public class AISensor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        inFov = inFOV(GameObject.FindGameObjectWithTag("Player"));
 
         hearingDistance = distance * 3f;
 

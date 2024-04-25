@@ -13,7 +13,9 @@ public class AIStateMachine : MonoBehaviour
     public int maxHealth = 100;
     public int health;
 
+    [HideInInspector]
     public AIMove aimove;
+    [HideInInspector]
     public AISensor aisensor;
 
 
@@ -45,9 +47,13 @@ public class AIStateMachine : MonoBehaviour
 
     private void Update()
     {
-        //isGrounded = controller.isGrounded;
-        //velocity = controller.velocity;
-        currentState.UpdateState();
+        if (!PauseMenu.isPaused)
+        {
+            //isGrounded = controller.isGrounded;
+            //velocity = controller.velocity;
+            currentState.UpdateState();
+        }
+
 
     }
 

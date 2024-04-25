@@ -84,10 +84,12 @@ public class Graph : MonoBehaviour
 
         if (shortestEdge.getWeight() >= float.PositiveInfinity)
         {
+            source.setOccupiedEnemy(true);
             return source;
         }
         else
         {
+            shortestEdge.getVertex2().setOccupiedEnemy(true);
             return shortestEdge.getVertex2();
         }
 
@@ -106,10 +108,12 @@ public class Graph : MonoBehaviour
 
         if (shortestEdge.getWeight() >= float.PositiveInfinity)
         {
+            source.setOccupiedEnemy(true);
             return source;
         }
         else
         {
+            shortestEdge.getVertex2().setOccupiedEnemy(true);
             return shortestEdge.getVertex2();
         }
     }
@@ -127,12 +131,41 @@ public class Graph : MonoBehaviour
 
         if (shortestEdge.getWeight() >= float.PositiveInfinity)
         {
+            source.setOccupiedEnemy(true);
             return source;
         }
         else
         {
+            shortestEdge.getVertex2().setOccupiedEnemy(true);
             return shortestEdge.getVertex2();
         }
+    }
+
+    public Vertex returnShortestLengthNotOccupiedEnemy(Transform source)
+    {
+
+        Vertex returnVertex = null;
+        float shortestDistance = float.PositiveInfinity;
+        foreach (Vertex vertex in map.Keys)
+        {
+
+            float distance = (source.position - vertex.transform.position).magnitude;
+
+            if (distance < shortestDistance && !vertex.getOccupiedEnemy())
+            {
+                shortestDistance = distance;
+                returnVertex = vertex;
+            }
+        }
+
+        if (shortestDistance >= float.PositiveInfinity)
+        {
+            returnVertex = returnShortestLengthFromPosition(source);
+        }
+
+        //Debug.Log("Return Vertex: " + returnVertex);
+        returnVertex.setOccupiedEnemy(true);
+        return returnVertex;
     }
 
     public Vertex returnShortestLengthYESOccupiedEnemy(Vertex source)
@@ -148,12 +181,40 @@ public class Graph : MonoBehaviour
 
         if (shortestEdge.getWeight() >= float.PositiveInfinity)
         {
+            source.setOccupiedEnemy(true);
             return source;
         }
         else
         {
+            shortestEdge.getVertex2().setOccupiedEnemy(true);
             return shortestEdge.getVertex2();
         }
+    }
+
+    public Vertex returnShortestLengthYESOccupiedEnemy(Transform source)
+    {
+        Vertex returnVertex = null;
+        float shortestDistance = float.PositiveInfinity;
+        foreach (Vertex vertex in map.Keys)
+        {
+
+            float distance = (source.position - vertex.transform.position).magnitude;
+
+            if (distance < shortestDistance && vertex.getOccupiedEnemy())
+            {
+                shortestDistance = distance;
+                returnVertex = vertex;
+            }
+        }
+
+        if (shortestDistance >= float.PositiveInfinity)
+        {
+            returnVertex = returnShortestLengthFromPosition(source);
+        }
+
+        //Debug.Log("Return Vertex: " + returnVertex);
+        returnVertex.setOccupiedEnemy(true);
+        return returnVertex;
     }
 
     public Vertex returnShortestLengthFromPosition(Transform source)
@@ -173,6 +234,7 @@ public class Graph : MonoBehaviour
         }
 
         //Debug.Log("Return Vertex: " + returnVertex);
+        returnVertex.setOccupiedEnemy(true);
         return returnVertex;
 
     }

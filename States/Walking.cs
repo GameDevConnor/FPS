@@ -120,11 +120,11 @@ public class Walking : State
         controller.Move(move * Time.deltaTime);
 
 
-        //if (player.health <= 0)
-        //{
-        //    SwitchState(factory.Dead());
-        //}
-        
+        if (player.health <= 0)
+        {
+            SwitchState(factory.Dead());
+        }
+
     }
 
 
