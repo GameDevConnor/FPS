@@ -67,6 +67,16 @@ using UnityEngine;
             //        }
         }
 
+        AIStateMachine npc = hit.collider.GetComponent<AIStateMachine>();
+        if (npc != null && canHit)
+        {
+            Debug.Log(hit.relativeVelocity.magnitude);
+
+            npc.health -= CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass);
+
+            StartCoroutine(cooldown());
+        }
+
     }
 
     private IEnumerator cooldown()

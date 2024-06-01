@@ -33,7 +33,7 @@ public class Thrower : Weapons
     // Update is called once per frame
     void Update()
     {
-        if (!PauseMenu.isPaused)
+        if (!PauseMenu.isPaused && !StateMachine.dead)
         {
             if (total <= 0)
             {

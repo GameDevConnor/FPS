@@ -6,14 +6,18 @@ public class Destructable : Prop
 {
     public GameObject destroyedVersion;
     public float health;
+    [HideInInspector]
     public CameraControl playerCam;
     public Camera camera;
 
 
+    public delegate void ObjectDestroyed();
+    public static event ObjectDestroyed destroyed;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        camera = Camera.main;
     }
 
     // Update is called once per frame
@@ -25,6 +29,10 @@ public class Destructable : Prop
         if (health <= 0)
         {
             Instantiate(destroyedVersion, transform.position, transform.rotation);
+            if (destroyed != null)
+            {
+                destroyed();
+            }
             Destroy(gameObject);
         }
         

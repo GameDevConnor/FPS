@@ -17,6 +17,7 @@ public class CameraControl : MonoBehaviour
     public Rigidbody rb;
 
     public float mouseY;
+    public float mouseX;
 
 
     // Start is called before the first frame update
@@ -24,6 +25,16 @@ public class CameraControl : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         rb = null;
+    }
+
+    private void FixedUpdate()
+    {
+        Ray ray = new Ray(transform.position, transform.forward);
+        Vector3 endOfRay = ray.GetPoint(range);
+        if (rb != null)
+        {
+            rb.velocity = (endOfRay - rb.position) * (carrySpeed * Time.deltaTime);
+        }
     }
 
     // Update is called once per frame
@@ -40,9 +51,14 @@ public class CameraControl : MonoBehaviour
 
         }
 
-        if (!PauseMenu.isPaused) {
+        if (StateMachine.dead)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+
+        if (!PauseMenu.isPaused && !StateMachine.dead) {
             canPressE = true;
-            float mouseX = Input.GetAxis("Mouse X") * sensitivity;
+            mouseX = Input.GetAxis("Mouse X") * sensitivity;
             //float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
             mouseY = Input.GetAxis("Mouse Y") * sensitivity;
 
@@ -63,6 +79,8 @@ public class CameraControl : MonoBehaviour
 
 
 
+
+
             if (Input.GetKeyDown(KeyCode.E) && grabbing == false && canPressE)
             {
 
@@ -70,12 +88,19 @@ public class CameraControl : MonoBehaviour
                 {
                     Pickup pickUp = grab.transform.GetComponent<Pickup>();
 
+                    Interactable interactable = grab.transform.GetComponent<Interactable>();
+
                     if (pickUp != null)
                     {
                         grabbing = true;
                         rb = grab.transform.GetComponent<Rigidbody>();
                         rb.constraints = RigidbodyConstraints.FreezeRotation;
                         canPressE = false;
+                    }
+
+                    if (interactable != null)
+                    {
+                        interactable.Action();
                     }
                 }
             }
@@ -90,10 +115,10 @@ public class CameraControl : MonoBehaviour
             }
 
 
-            if (rb != null)
-            {
-                rb.velocity = (endOfRay - rb.position) * (carrySpeed * Time.deltaTime);
-            }
+            //if (rb != null)
+            //{
+            //    rb.velocity = (endOfRay - rb.position) * (carrySpeed * Time.deltaTime);
+            //}
 
 
 
@@ -115,4 +140,6 @@ public class CameraControl : MonoBehaviour
 
         }
     }
+
+
 }

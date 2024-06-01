@@ -131,7 +131,7 @@ public class Vertex : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(transform.position, vertexCircleSize);
+        Gizmos.DrawWireSphere(transform.position, vertexCircleSize);
     }
 
 }

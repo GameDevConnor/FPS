@@ -21,8 +21,8 @@ public class Gun : Weapons
     public float reloadTime;
     public int magazine;
     public int total;
-    public bool canReload = true;
-    public bool canShoot = true;
+    public static bool canReload = true;
+    public static bool canShoot = true;
     public int fullMagazine;
 
     public float spread;
@@ -38,6 +38,8 @@ public class Gun : Weapons
 
     public float recoilX;
     public float recoilY;
+
+    [HideInInspector]
     public CameraControl playerCam;
 
 
@@ -57,10 +59,21 @@ public class Gun : Weapons
     [SerializeField]
     private float normalFOV = 60f;
 
+    public LineRenderer laser;
+    public float laserWaitTime = 1.1f;
+
+    public GameObject muzzle;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        camera = Camera.main;
+        laser = camera.GetComponent<LineRenderer>();
+
+        total = 0;
+
     }
 
     private void OnEnable()
@@ -76,7 +89,7 @@ public class Gun : Weapons
     void Update()
     {
 
-        if (!PauseMenu.isPaused)
+        if (!PauseMenu.isPaused && !StateMachine.dead)
         {
 
             playerCam = camera.transform.GetComponent<CameraControl>();
@@ -90,11 +103,17 @@ public class Gun : Weapons
                 gameObject.SetActive(true);
             }
 
-            if ((magazine == 0 || Input.GetKeyDown(KeyCode.R)) && canReload)
+            if ((magazine == 0 || Input.GetKeyDown(KeyCode.R)) && canReload && total != 0)
             {
                 StartCoroutine(reload());
             }
 
+
+            if (magazine == 0)
+            {
+                canShoot = false;
+                
+            }
 
 
 
@@ -173,16 +192,18 @@ public class Gun : Weapons
 
     void Shoot()
     {
+        laser.enabled = true;
+        laser.SetPosition(0, muzzle.transform.position);
 
         if (ADS)
         {
-            recoilX = Random.Range(-0.1f, 0.1f);
+            recoilX = Random.Range(-0.1f, 0.1f) / ADSRecoilModifier;
 
             float x = Random.Range(-spread, spread);
             float y = Random.Range(-spread, spread);
             float z = Random.Range(-spread, spread);
 
-            Vector3 shootDirection = camera.transform.forward + new Vector3(x, y, z);
+            Vector3 shootDirection = camera.transform.forward + (new Vector3(x, y, z) / ADSSpreadModifier);
             //Debug.Log("shootDirection: " + shootDirection + ", camera: " + camera.transform.forward);
 
 
@@ -194,6 +215,12 @@ public class Gun : Weapons
                 Hittable hittable = hit.transform.GetComponent<Hittable>();
                 Destructable destructable = hit.transform.GetComponent<Destructable>();
                 AIStateMachine enemy = hit.transform.GetComponent<AIStateMachine>();
+                ShootingTarget shootingTarget = hit.transform.GetComponent<ShootingTarget>();
+
+                if (shootingTarget != null)
+                {
+                    shootingTarget.Action();
+                }
 
 
                 if (hittable != null)
@@ -218,13 +245,27 @@ public class Gun : Weapons
 
                 GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(impact, 2f);
+
+                laser.SetPosition(1, hit.point);
+                StartCoroutine(laserWait());
+            }
+            else
+            {
+                laser.SetPosition(1, shootDirection * range);
+                StartCoroutine(laserWait());
+
             }
 
             magazine--;
 
             playerCam.player.Rotate(Vector3.up * recoilX);
 
-            playerCam.xRotation -= recoilY;
+            playerCam.xRotation -= (recoilY / ADSRecoilModifier);
+
+
+            
+
+
         }
         else
         {
@@ -247,7 +288,12 @@ public class Gun : Weapons
                 Hittable hittable = hit.transform.GetComponent<Hittable>();
                 Destructable destructable = hit.transform.GetComponent<Destructable>();
                 AIStateMachine enemy = hit.transform.GetComponent<AIStateMachine>();
+                ShootingTarget shootingTarget = hit.transform.GetComponent<ShootingTarget>();
 
+                if (shootingTarget != null)
+                {
+                    shootingTarget.Action();
+                }
 
                 if (hittable != null)
                 {
@@ -269,8 +315,21 @@ public class Gun : Weapons
                     enemy.health -= damage;
                 }
 
+
+
                 GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(impact, 2f);
+
+                laser.SetPosition(1, hit.point);
+                StartCoroutine(laserWait());
+
+
+            }
+            else
+            {
+                laser.SetPosition(1, shootDirection * range);
+                StartCoroutine(laserWait());
+
             }
 
             magazine--;
@@ -286,6 +345,9 @@ public class Gun : Weapons
     void ShootShotgun(int bullets)
     {
         recoilX = Random.Range(-0.1f, 0.1f);
+
+        laser.SetPosition(0, muzzle.transform.position);
+
 
 
         for (int i = 0; i < bullets; i++)
@@ -304,6 +366,12 @@ public class Gun : Weapons
                 Hittable hittable = hit.transform.GetComponent<Hittable>();
                 Destructable destructable = hit.transform.GetComponent<Destructable>();
                 AIStateMachine enemy = hit.transform.GetComponent<AIStateMachine>();
+                ShootingTarget shootingTarget = hit.transform.GetComponent<ShootingTarget>();
+
+                if (shootingTarget != null)
+                {
+                    shootingTarget.Action();
+                }
 
 
                 if (hittable != null)
@@ -328,6 +396,16 @@ public class Gun : Weapons
 
                 GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(impact, 2f);
+
+                laser.SetPosition(1, hit.point);
+                StartCoroutine(laserWait());
+
+            }
+            else
+            {
+                laser.SetPosition(1, shootDirection * range);
+                StartCoroutine(laserWait());
+
             }
 
         }
@@ -419,5 +497,11 @@ public class Gun : Weapons
         //mainCamera.fieldOfView = normalFOV;
         mainCamera.fieldOfView = 60f;
 
+    }
+
+    IEnumerator laserWait()
+    {
+        yield return new WaitForSeconds(laserWaitTime);
+        laser.enabled = false;
     }
 }

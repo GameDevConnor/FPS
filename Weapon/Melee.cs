@@ -23,20 +23,20 @@ public class Melee : Weapons
     // Start is called before the first frame update
     void Start()
     {
-        
+        camera = Camera.main;
     }
 
     private void OnEnable()
     {
         canShoot = true;
         animator.SetBool("Swinging", false);
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!PauseMenu.isPaused)
+        if (!PauseMenu.isPaused && !StateMachine.dead)
         {
             CameraControl playerCam = camera.transform.GetComponent<CameraControl>();
 

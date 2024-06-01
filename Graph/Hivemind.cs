@@ -10,7 +10,6 @@ public class Hivemind : MonoBehaviour
 
     public List<AIStateMachine> squad;
 
-    public bool lastManStanding;
 
     public Graph graph;
 
@@ -25,14 +24,6 @@ public class Hivemind : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (squadCount() > 1)
-        {
-            lastManStanding = false;
-        }
-        else
-        {
-            lastManStanding = true;
-        }
     }
 
     public bool isOccupiedPlayer(Vertex vertex)

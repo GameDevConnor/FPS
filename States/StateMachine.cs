@@ -22,6 +22,11 @@ public class StateMachine : MonoBehaviour
 
     public Inventory inventory;
 
+    public static bool dead;
+
+
+    private bool inputPaused = false;
+
 
 
     void Awake()
@@ -36,10 +41,25 @@ public class StateMachine : MonoBehaviour
 
     }
 
+    void InputOn()
+    {
+        this.inputPaused = true;
+    }
+
+    void InputOff()
+    {
+        this.inputPaused = false;
+    }
+
+    void SwitchInput()
+    {
+        this.inputPaused = !inputPaused;
+    }
+
     private void Update()
     {
 
-        if (!PauseMenu.isPaused)
+        if (!PauseMenu.isPaused && !dead && !inputPaused)
         {
 
 
@@ -48,6 +68,16 @@ public class StateMachine : MonoBehaviour
             velocity = controller.velocity;
             currentState.UpdateState();
 
+        }
+
+
+        if (health <= 0)
+        {
+            dead = true;
+        }
+        else
+        {
+            dead = false;
         }
     }
 

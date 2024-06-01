@@ -14,7 +14,7 @@ public class Text : MonoBehaviour
     public TextMeshProUGUI rightText;
     public TextMeshProUGUI healthText;
 
-    public Camera player;
+    GameObject player;
     public StateMachine playerHealth;
      
     // Start is called before the first frame update
@@ -22,7 +22,7 @@ public class Text : MonoBehaviour
     {
         leftText.text = leftClick;
         rightText.text = rightClick;
-        player = FindObjectOfType<Camera>();
+        player = GameObject.FindWithTag("MainCamera");
     }
 
     // Update is called once per frame
@@ -41,7 +41,7 @@ public class Text : MonoBehaviour
         CameraControl playerCam = player.transform.GetComponent<CameraControl>();
 
 
-        if (playerCam != null && playerCam.grabbing == false)
+        if (playerCam != null && !playerCam.grabbing)
         {
             grabText.text = pickup;
             leftText.enabled = false;
