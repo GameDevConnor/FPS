@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SnapToPlace : MonoBehaviour, Interactable
+public class SnapToPlace : MonoBehaviour
 {
     public StageObject stageObject;
     public GameObject snapObject;
@@ -24,7 +22,7 @@ public class SnapToPlace : MonoBehaviour, Interactable
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void OnTriggerEnter(Collider other)

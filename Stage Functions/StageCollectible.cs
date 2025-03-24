@@ -1,14 +1,12 @@
 using UnityEngine;
 
-public class WalkingTrigger : MonoBehaviour
+public class StageCollectible : MonoBehaviour
 {
-    public StageObject stageObject;
-    public void Action()
-    {
-        stageObject.Function();
-    }
 
+    public string objectName;
+    public InventoryCheck inventoryCheck;
     // Start is called before the first frame update
+
     void Start()
     {
 
@@ -20,11 +18,13 @@ public class WalkingTrigger : MonoBehaviour
 
     }
 
-    public void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Action();
+            inventoryCheck.AddToList(this.objectName);
+
+            Destroy(gameObject);
         }
     }
 }

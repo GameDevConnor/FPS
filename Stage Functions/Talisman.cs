@@ -1,13 +1,8 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class WalkingTrigger : MonoBehaviour
+public class Talisman : MonoBehaviour
 {
-    public StageObject stageObject;
-    public void Action()
-    {
-        stageObject.Function();
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -20,11 +15,13 @@ public class WalkingTrigger : MonoBehaviour
 
     }
 
-    public void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Action();
+            TalismanDisplay.collected += 1;
+            DataPersistenceManager.instance.SaveGame();
+            SceneManager.LoadScene(1);
         }
     }
 }
