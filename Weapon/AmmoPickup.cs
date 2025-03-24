@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AmmoPickup : MonoBehaviour
@@ -17,7 +15,7 @@ public class AmmoPickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
@@ -57,7 +55,7 @@ public class AmmoPickup : MonoBehaviour
 
                 }
 
-                
+
             }
 
             if (weapon == null)
@@ -69,7 +67,7 @@ public class AmmoPickup : MonoBehaviour
 
 
                 Weapons newnewWeapon = Instantiate(newWeapon, inventory.transform);
-                // Now that it instantiates new objects, instead of adding up to the prefab so that the total accumulates every time I play the scene, it is a copy, so it doesn't affect the prefab
+                // Now that it instantiates new objects, instead of adding up the total ammo to the prefab so that the total accumulates every time I play the scene, it is a copy, so it doesn't affect the prefab
 
                 inventory.guns[inventory.guns.Length - 1] = newnewWeapon;
 
@@ -78,7 +76,7 @@ public class AmmoPickup : MonoBehaviour
 
                 if (newWeapon.name.Equals("Pistol"))
                 {
-                    
+
                     newWeapon.transform.position = new Vector3(2.79f, -0.76f, 2.55f);
                 }
                 if (newWeapon.name.Equals("SMG"))

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -74,10 +73,10 @@ public class Inventory : MonoBehaviour
                         }
                     }
 
-                    
+
                 }
 
-                
+
             }
 
 
@@ -113,10 +112,10 @@ public class Inventory : MonoBehaviour
 
     }
 
-        public int getLength()
-        {
-            return guns.Length;
-        }
+    public int getLength()
+    {
+        return guns.Length;
+    }
 
 
     IEnumerator animationWaitDown()
@@ -132,7 +131,7 @@ public class Inventory : MonoBehaviour
         {
             selection++;
         }
-        
+
         animator.SetBool("Switching", false);
 
     }
@@ -150,7 +149,7 @@ public class Inventory : MonoBehaviour
         {
             selection--;
         }
-        
+
         animator.SetBool("Switching", false);
 
     }

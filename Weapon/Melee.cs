@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Melee : Weapons
@@ -30,7 +29,7 @@ public class Melee : Weapons
     {
         canShoot = true;
         animator.SetBool("Swinging", false);
-        
+
     }
 
     // Update is called once per frame

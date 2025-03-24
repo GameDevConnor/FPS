@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Grenade : Weapons
@@ -49,11 +47,11 @@ public class Grenade : Weapons
 
     void Explode()
     {
-        
+
         Instantiate(explosionEffect, transform.position, transform.rotation);
 
 
-        
+
         Collider[] objects = Physics.OverlapSphere(transform.position, range);
         foreach (Collider nearObjects in objects)
         {

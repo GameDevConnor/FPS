@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Gun : Weapons
@@ -11,7 +10,7 @@ public class Gun : Weapons
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
     public float force;
-    
+
     public float rateOfFire;
     private float nextTimetoFire = 0f;
 
@@ -64,6 +63,7 @@ public class Gun : Weapons
 
     public GameObject muzzle;
 
+    public LayerMask masks;
 
 
     // Start is called before the first frame update
@@ -112,7 +112,7 @@ public class Gun : Weapons
             if (magazine == 0)
             {
                 canShoot = false;
-                
+
             }
 
 
@@ -187,7 +187,7 @@ public class Gun : Weapons
 
             }
         }
-        
+
     }
 
     void Shoot()
@@ -209,7 +209,7 @@ public class Gun : Weapons
 
             muzzleFlash.Play();
             RaycastHit hit;
-            if (Physics.Raycast(camera.transform.position, /*camera.transform.forward*/ shootDirection, out hit, range))
+            if (Physics.Raycast(camera.transform.position, /*camera.transform.forward*/ shootDirection, out hit, range, masks))
             {
                 //Debug.Log(hit.transform.name);
                 Hittable hittable = hit.transform.GetComponent<Hittable>();
@@ -263,7 +263,7 @@ public class Gun : Weapons
             playerCam.xRotation -= (recoilY / ADSRecoilModifier);
 
 
-            
+
 
 
         }
@@ -282,7 +282,7 @@ public class Gun : Weapons
 
             muzzleFlash.Play();
             RaycastHit hit;
-            if (Physics.Raycast(camera.transform.position, /*camera.transform.forward*/ shootDirection, out hit, range))
+            if (Physics.Raycast(camera.transform.position, /*camera.transform.forward*/ shootDirection, out hit, range, masks))
             {
                 //Debug.Log(hit.transform.name);
                 Hittable hittable = hit.transform.GetComponent<Hittable>();
@@ -360,7 +360,7 @@ public class Gun : Weapons
 
             muzzleFlash.Play();
             RaycastHit hit;
-            if (Physics.Raycast(camera.transform.position, /*camera.transform.forward*/ shootDirection, out hit, range))
+            if (Physics.Raycast(camera.transform.position, /*camera.transform.forward*/ shootDirection, out hit, range, masks))
             {
                 //Debug.Log(hit.transform.name);
                 Hittable hittable = hit.transform.GetComponent<Hittable>();
@@ -430,21 +430,21 @@ public class Gun : Weapons
         {
             animator.SetBool("Shot", true);
         }
-        
+
 
         // There is a bit of a transition in delay. By default it's 0.25 seconds
         //yield return new WaitForSeconds(nextTimetoFire - 0.25f);
         yield return new WaitForSeconds(recoilTime);
 
 
-            // There is a bit of a transition in delay. By default it's 0.25 seconds
-            animator.SetBool("ShotScoped", false);
-            // This is a workaround
-            //yield return new WaitForSeconds(0.25f);
+        // There is a bit of a transition in delay. By default it's 0.25 seconds
+        animator.SetBool("ShotScoped", false);
+        // This is a workaround
+        //yield return new WaitForSeconds(0.25f);
 
-            animator.SetBool("Shot", false);
+        animator.SetBool("Shot", false);
 
-        
+
 
         canReload = true;
         canShoot = true;
