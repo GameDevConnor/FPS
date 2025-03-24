@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraControl : MonoBehaviour
@@ -56,7 +54,8 @@ public class CameraControl : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
         }
 
-        if (!PauseMenu.isPaused && !StateMachine.dead) {
+        if (!PauseMenu.isPaused && !StateMachine.dead && !StateMachine.inputPaused)
+        {
             canPressE = true;
             mouseX = Input.GetAxis("Mouse X") * sensitivity;
             //float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
@@ -124,6 +123,15 @@ public class CameraControl : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0) && grabbing)
             {
+
+                Dodgeball dodgeball = rb.gameObject.GetComponent<Dodgeball>();
+
+                if (dodgeball != null)
+                {
+                    dodgeball.thrown = true;
+                    dodgeball.lastThrower = "Player";
+                }
+
                 grabbing = false;
                 rb.AddForce(transform.forward * CalculateForce.calculateForceHard(rb.mass));
                 rb = null;
@@ -132,6 +140,17 @@ public class CameraControl : MonoBehaviour
 
             if (Input.GetMouseButtonDown(1) && grabbing)
             {
+
+                Dodgeball dodgeball = rb.gameObject.GetComponent<Dodgeball>();
+
+                if (dodgeball != null)
+                {
+                    dodgeball.thrown = true;
+                    dodgeball.lastThrower = "Player";
+
+                }
+
+
                 grabbing = false;
                 rb.AddForce(transform.forward * CalculateForce.calculateForceSoft(rb.mass));
                 rb = null;

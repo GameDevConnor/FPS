@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class CalculateForce
@@ -17,8 +15,8 @@ public static class CalculateForce
     public static int calculateDamage(float speed, int mass)
     {
 
-        int damage = (int) (mass * Mathf.Log10(speed + 1));
-        Debug.Log("Damage: " + damage);
+        int damage = (int)(mass * Mathf.Log10(speed + 1));
+        //Debug.Log("Damage: " + damage);
         return damage;
     }
 }

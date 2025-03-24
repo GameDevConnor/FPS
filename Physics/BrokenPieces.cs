@@ -1,12 +1,14 @@
 using UnityEngine;
 
-public class Destroy : MonoBehaviour
+public class BrokenPieces : MonoBehaviour
 {
-    public float time = 2.0f;
+
+    public int totalPieces;
+
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(gameObject, time);
+
     }
 
     // Update is called once per frame

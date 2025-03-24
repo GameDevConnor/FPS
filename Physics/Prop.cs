@@ -1,14 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-    public class Prop : Pickup
-    {
+public class Prop : Pickup
+{
 
     public float thresholdVelocity = 15f;
-    private Rigidbody rb;
+    protected Rigidbody rb;
     public float cooldownTime = 0.3f;
     public bool canHit = true;
+    public int baseDamage;
 
     // Start is called before the first frame update
     void Start()
@@ -16,13 +16,13 @@ using UnityEngine;
         rb = GetComponent<Rigidbody>();
     }
 
-// Update is called once per frame
+    // Update is called once per frame
     void Update()
     {
 
     }
 
-    
+
     override
     public void Grab()
     {
@@ -32,17 +32,18 @@ using UnityEngine;
 
     public override void Throw()
     {
-        
+
     }
 
-    private void OnCollisionEnter(Collision hit)
+    protected void OnCollisionEnter(Collision hit)
     {
-        StateMachine thrownPlayer = hit.collider.GetComponent<StateMachine>();
-        if (thrownPlayer != null && canHit)
-        {
-            Debug.Log(hit.relativeVelocity.magnitude);
 
-            thrownPlayer.health -= CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass);
+        StateMachine thrownPlayer = hit.collider.GetComponent<StateMachine>();
+        if (thrownPlayer != null && canHit && (hit.relativeVelocity.magnitude >= thresholdVelocity))
+        {
+            //Debug.Log(hit.relativeVelocity.magnitude);
+
+            thrownPlayer.health -= (CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass) + baseDamage);
 
             StartCoroutine(cooldown());
 
@@ -53,11 +54,11 @@ using UnityEngine;
         }
 
         Target thrownTarget = hit.collider.GetComponent<Target>();
-        if (thrownTarget != null && canHit)
+        if (thrownTarget != null && canHit && (hit.relativeVelocity.magnitude >= thresholdVelocity))
         {
-            Debug.Log(hit.relativeVelocity.magnitude);
+            //Debug.Log(hit.relativeVelocity.magnitude);
 
-            thrownTarget.health -= CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass);
+            thrownTarget.health -= (CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass) + baseDamage);
 
             StartCoroutine(cooldown());
 
@@ -68,11 +69,13 @@ using UnityEngine;
         }
 
         AIStateMachine npc = hit.collider.GetComponent<AIStateMachine>();
-        if (npc != null && canHit)
+
+        if (npc != null && canHit && (hit.relativeVelocity.magnitude >= thresholdVelocity) && (rb.velocity.magnitude > 0))
         {
             Debug.Log(hit.relativeVelocity.magnitude);
 
-            npc.health -= CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass);
+            //npc.health -= (CalculateForce.calculateDamage(hit.relativeVelocity.magnitude, (int)rb.mass) + baseDamage);
+            npc.health -= baseDamage;
 
             StartCoroutine(cooldown());
         }
