@@ -1,23 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Alert : AIState
 {
 
-    public GameObject player = GameObject.FindGameObjectWithTag("Player");
+    //public GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+    public GameObject player;
 
 
     public override void EnterState()
     {
         Debug.Log("Alert");
-        machine.retreated = true;
-
     }
 
     public override void UpdateState()
     {
-        if (!machine.aisensor.inHearingSphere(player) && !machine.aisensor.inFOV(player))
+        player = machine.playerObject;
+
+        if (!machine.aisensor.inHearingSphere() && !machine.aisensor.inFOV(player))
         {
             SwitchState(factory.Guard());
         }
@@ -32,30 +32,25 @@ public class Alert : AIState
             SwitchState(factory.Pursuit());
         }
 
-        //if (machine.aisensor.inFOV(player))
-        //{
 
-        //    SwitchState(factory.Attacking());
-        //}
+        if (machine.aisensor.inFOV(player))
+        {
+            SwitchState(factory.Attacking());
+        }
 
 
-        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance))
+        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance) && machine.retreated == false)
         {
 
             SwitchState(factory.Retreat());
         }
 
 
-        //if (machine.aimove.hivemind.lastManStanding)
-        //{
-        //    SwitchState(factory.Pursuit());
-        //}
-
-        machine.aimove.setDestination(player.transform);
+        machine.aimove.setDestination(player.transform.position);
 
     }
 
-    public Alert(AIStateMachine machine, AIStateFactory factory) : base (machine, factory)
+    public Alert(AIStateMachine machine, AIStateFactory factory) : base(machine, factory)
     {
 
     }
@@ -69,6 +64,6 @@ public class Alert : AIState
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

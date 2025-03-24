@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Guard : AIState
 {
 
-    public GameObject player = GameObject.FindGameObjectWithTag("Player");
-
+    //public GameObject player = GameObject.FindGameObjectWithTag("Player");
+    public GameObject player;
 
     public Guard(AIStateMachine machine, AIStateFactory factory) : base(machine, factory)
     {
@@ -16,47 +14,59 @@ public class Guard : AIState
     public override void EnterState()
     {
         Debug.Log("Guard");
-        machine.retreated = true;
-
-
     }
 
     public override void UpdateState()
     {
-
-
-        if (machine.aisensor.inSphere(player) && !machine.aisensor.inFOV(player))
-        {
-            SwitchState(factory.Pursuit());
-        }
-
-        if (machine.aisensor.inHearingSphere(player) && !machine.aisensor.inFOV(player) && !machine.aisensor.inSphere(player))
-        {
-            SwitchState(factory.Alert());
-        }
-
-        if (machine.aisensor.inFOV(player))
-        {
-            SwitchState(factory.Attacking());
-        }
-        
-        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance))
-        {
-            SwitchState(factory.Retreat());
-        }
-
-        //if (machine.aimove.hivemind.lastManStanding)
-        //{
-        //    SwitchState(factory.Pursuit());
-        //}
-
         if (machine.health <= 0)
         {
             SwitchState(factory.AIDead());
         }
 
-        machine.aimove.setDestination();
-        
+        player = machine.playerObject;
+
+        machine.aimove.setDestinationtoGuard();
+
+        if (Vector3.Distance(machine.transform.position, machine.aimove.guardPosition) <= machine.aisensor.agent.stoppingDistance)
+        {
+            machine.completedRetreat = true;
+        }
+
+        if (machine.retreated == false)
+        {
+            if (machine.aisensor.inSphere(player) && !machine.aisensor.inFOV(player))
+            {
+                machine.completedRetreat = false;
+                SwitchState(factory.Pursuit());
+            }
+        }
+
+        if (machine.retreated == false)
+        {
+            if (machine.aisensor.inHearingSphere() && !machine.aisensor.inFOV(player) && !machine.aisensor.inSphere(player))
+            {
+                machine.completedRetreat = false;
+                SwitchState(factory.Alert());
+            }
+        }
+
+        if (machine.retreated == false)
+        {
+            if (machine.aisensor.inFOV(player))
+            {
+                machine.completedRetreat = false;
+                SwitchState(factory.Attacking());
+            }
+        }
+
+        if (machine.completedRetreat)
+        {
+            if (machine.aisensor.inFOV(player))
+            {
+                SwitchState(factory.Attacking());
+            }
+        }
+
     }
 
 
@@ -68,6 +78,6 @@ public class Guard : AIState
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

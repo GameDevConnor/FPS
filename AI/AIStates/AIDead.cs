@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AIDead : AIState
@@ -11,6 +9,8 @@ public class AIDead : AIState
     public float acceleration = 12f;
     //public CharacterController controller;
     public float yVel;
+
+    public bool dropped;
 
 
 
@@ -24,35 +24,18 @@ public class AIDead : AIState
     {
         gravity = 10;
         Debug.Log("yo that guy died");
+        dropped = true;
     }
 
     public override void UpdateState()
     {
-        //camera = FindObjectOfType<Camera>();
-        //controller = FindObjectOfType<CharacterController>();
 
+        if (dropped && machine.deathSpawn != null)
+        {
+            Instantiate(machine.deathSpawn, machine.transform.position, machine.transform.rotation);
+            dropped = false;
+        }
 
-        //if (!controller.isGrounded && controller.velocity.y < 0)
-        //{
-
-        //}
-
-        //if (controller.isGrounded && Input.GetKeyDown(KeyCode.Space))
-        //{
-
-        //}
-
-
-        //move.y -= gravity;
-
-
-        //yVel -= gravity * Time.deltaTime;
-
-
-        //move.y = yVel;
-
-        //controller.Move(move * Time.deltaTime);
-
-        machine.aimove.setDestination(machine.transform);
+        machine.aisensor.agent.SetDestination(machine.transform.position);
     }
 }

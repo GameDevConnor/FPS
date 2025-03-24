@@ -1,41 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pursuit : AIState
 {
 
-    public GameObject player = GameObject.FindGameObjectWithTag("Player");
+    //public GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+    public GameObject player;
+
 
 
     public override void EnterState()
     {
         Debug.Log("Pursuit");
-        machine.retreated = true;
 
     }
 
     public override void UpdateState()
     {
 
+        player = machine.playerObject;
+
 
         if (machine.aisensor.inFOV(player))
         {
-
             SwitchState(factory.Attacking());
         }
 
 
-        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance))
+        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance) && machine.retreated == false)
         {
 
             SwitchState(factory.Retreat());
         }
 
-        //if (machine.aimove.hivemind.lastManStanding)
-        //{
-        //    SwitchState(factory.Pursuit());
-        //}
 
         if (machine.health <= 0)
         {
@@ -43,7 +40,7 @@ public class Pursuit : AIState
         }
 
 
-        machine.aimove.setDestination(player.transform);
+        machine.aisensor.chooseDestinationApproach();
 
     }
 
@@ -60,6 +57,6 @@ public class Pursuit : AIState
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

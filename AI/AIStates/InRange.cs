@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InRange : AIState
@@ -34,7 +32,7 @@ public class InRange : AIState
         }
 
 
-        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance))
+        if (machine.health <= (machine.maxHealth / 2) && !(machine.aimove.enemy.remainingDistance <= machine.aimove.enemy.stoppingDistance) && machine.retreated == false)
         {
 
             SwitchState(factory.Retreat());
@@ -64,6 +62,6 @@ public class InRange : AIState
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

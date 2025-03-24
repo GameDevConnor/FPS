@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AIState : MonoBehaviour
@@ -9,6 +7,7 @@ public abstract class AIState : MonoBehaviour
     public AIStateFactory factory;
 
     public AIStateMachine player = FindObjectOfType<AIStateMachine>();
+
 
 
     public void Start()
