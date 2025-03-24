@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StateMachine : MonoBehaviour
@@ -25,8 +23,13 @@ public class StateMachine : MonoBehaviour
     public static bool dead;
 
 
-    private bool inputPaused = false;
+    public static bool inputPaused = false;
 
+
+    public int left;
+    public int right;
+    public int committed;
+    public int nonCommitted;
 
 
     void Awake()
@@ -39,21 +42,26 @@ public class StateMachine : MonoBehaviour
 
         currentState.EnterState();
 
+        left = 0;
+        right = 0;
+        committed = 0;
+        nonCommitted = 0;
+
     }
 
-    void InputOn()
+    public void InputOn()
     {
-        this.inputPaused = true;
+        StateMachine.inputPaused = false;
     }
 
-    void InputOff()
+    public void InputOff()
     {
-        this.inputPaused = false;
+        StateMachine.inputPaused = true;
     }
 
     void SwitchInput()
     {
-        this.inputPaused = !inputPaused;
+        StateMachine.inputPaused = !inputPaused;
     }
 
     private void Update()
@@ -89,6 +97,17 @@ public class StateMachine : MonoBehaviour
         currentState = state;
         currentState.EnterState();
 
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        TeleportBlock teleportBlock = hit.gameObject.GetComponent<TeleportBlock>();
+        controller = FindObjectOfType<CharacterController>();
+
+        if (teleportBlock != null)
+        {
+            teleportBlock.Teleport(gameObject);
+        }
     }
 
 

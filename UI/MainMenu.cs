@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +12,15 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         StateMachine.dead = false;
+        SceneManager.LoadScene(1);
+    }
+
+    public void NewGame()
+    {
+        StateMachine.dead = false;
+        TalismanDisplay.collected = 0;
+        DataPersistenceManager.instance.SaveGame();
+        //DataPersistenceManager.instance.NewGame();
         SceneManager.LoadScene(1);
     }
 

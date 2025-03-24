@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
 // Gives us nicer syntax for finding IDataPersistence objects
 using System.Linq;
+using UnityEngine;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -38,7 +36,8 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame()
     {
-        // TODO pass data to other scripts so that they can update it
+        //Saving – DataPersistenceManager will pass GameData object by reference to each script that implements IDataPersistence, those scripts will modify the GameData object. After all the scripts have done so, DataPersistenceManager will use the FileDataHandler to write to JSON
+
         foreach (IDataPersistence dataPersistence in dataPersistenceObjects)
         {
             dataPersistence.SaveData(ref gameData);
@@ -59,7 +58,8 @@ public class DataPersistenceManager : MonoBehaviour
             NewGame();
         }
 
-        // TODO - Push loaded data to all other scripts
+        //Loading – DataPersistenceManager will use the FileDataHandler to read JSON and convert to C# GameData Object. DataPersistenceManager will pass that data to any script that implements IDataPersistence
+
         foreach (IDataPersistence dataPersistence in dataPersistenceObjects)
         {
             dataPersistence.LoadData(gameData);

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,17 +12,22 @@ public class Hivemind : MonoBehaviour
 
     public Graph graph;
 
-    
+
     void Start()
     {
         graph = new Graph(vertices.Count, vertices);
-        //Debug.Log(graph.toString());
+
+        foreach (AIStateMachine enemy in squad)
+        {
+            enemy.aimove.hivemind = this;
+        }
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        squad.RemoveAll(item => item == null);
     }
 
     public bool isOccupiedPlayer(Vertex vertex)
@@ -53,7 +57,12 @@ public class Hivemind : MonoBehaviour
     {
         foreach (AIStateMachine enemy in squad)
         {
-            enemy.aimove.setDestination(graph.returnShortestLengthNotOccupiedEnemy(announcer).transform);
+            if (!enemy.transform.Equals(announcer.transform))
+            {
+                //enemy.aimove.setDestination(enemy.player.transform.position);
+                enemy.aisensor.chooseDestinationApproach();
+                //enemy.SwitchState(enemy.factory.Pursuit());
+            }
         }
     }
 }

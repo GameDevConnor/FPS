@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,13 +16,13 @@ public class DeathMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-            if (StateMachine.dead)
-            {
-                DeathScreen();
-            }
 
-        
+        if (StateMachine.dead)
+        {
+            DeathScreen();
+        }
+
+
     }
 
     public void DeathScreen()

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
     private List<TKey> keys = new List<TKey>();
     private List<TValue> values = new List<TValue>();
 
-    
+
     // Load dictionary from Lists
     public void OnAfterDeserialize()
     {
@@ -38,6 +37,6 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
             keys.Add(pair.Key);
             values.Add(pair.Value);
         }
-        
+
     }
 }

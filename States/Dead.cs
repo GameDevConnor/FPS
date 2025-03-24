@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Dead : State
@@ -34,12 +32,12 @@ public class Dead : State
 
         if (!controller.isGrounded && controller.velocity.y < 0)
         {
-            
+
         }
 
         if (controller.isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
-            
+
         }
 
 

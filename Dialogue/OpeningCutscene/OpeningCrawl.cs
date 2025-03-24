@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OpeningCrawl : MonoBehaviour
@@ -17,13 +16,13 @@ public class OpeningCrawl : MonoBehaviour
 
         StopAllCoroutines();
         StartCoroutine(openingTextCrawl());
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public IEnumerator openingTextCrawl()

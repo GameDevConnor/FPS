@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -54,7 +54,7 @@ public class DialogueManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     // This will the start the entire interaction
@@ -65,7 +65,7 @@ public class DialogueManager : MonoBehaviour
         {
             animator.SetBool("IsOpen", true);
         }
-        
+
 
         if (nameText != null)
         {
@@ -75,7 +75,8 @@ public class DialogueManager : MonoBehaviour
 
         sentences.Clear();
 
-        foreach (string sentence in dialogue.sentences) {
+        foreach (string sentence in dialogue.sentences)
+        {
             sentences.Enqueue(sentence);
         }
 
@@ -99,15 +100,15 @@ public class DialogueManager : MonoBehaviour
         string sentence = sentences.Dequeue();
 
         // This is if we want it all to update at once, however if we want 1 letter at a time, we can use a Coroutine
-        //dialogueText.text = sentence;
+        dialogueText.text = sentence;
 
 
 
         // The player is likely to stop the sentence before it's completely finished. If that happens, we want to stop the current animation before starting the new one
         // If TypeSentence is already running, it will stop before starting the new one
-        StopAllCoroutines();
+        //StopAllCoroutines();
 
-        StartCoroutine(TypeSentence(sentence));
+        //StartCoroutine(TypeSentence(sentence));
 
     }
 
@@ -139,7 +140,7 @@ public class DialogueManager : MonoBehaviour
         {
             animator.SetBool("IsOpen", false);
         }
-        
+
     }
 }
 

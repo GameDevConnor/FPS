@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class Text : MonoBehaviour
 {
@@ -16,7 +14,7 @@ public class Text : MonoBehaviour
 
     GameObject player;
     public StateMachine playerHealth;
-     
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +34,7 @@ public class Text : MonoBehaviour
         {
             healthText.text = playerHealth.health + "";
         }
-        
+
 
         CameraControl playerCam = player.transform.GetComponent<CameraControl>();
 

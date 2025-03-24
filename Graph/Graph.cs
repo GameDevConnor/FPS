@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,7 +28,7 @@ public class Graph : MonoBehaviour
                 {
                     this.AddEdge(vertex, otherVertices);
                 }
-        }
+            }
             //vertices.Add(vertex);
 
         }
@@ -49,7 +48,7 @@ public class Graph : MonoBehaviour
     void AddEdge(Vertex vertex1, Vertex vertex2)
     {
         Edge edge = new Edge(vertex1, vertex2);
-        
+
         map[vertex1].Add(edge);
         //map[vertex2].Add(edge);
     }
