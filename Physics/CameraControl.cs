@@ -77,9 +77,6 @@ public class CameraControl : MonoBehaviour
             Vector3 endOfRay = ray.GetPoint(range);
 
 
-
-
-
             if (Input.GetKeyDown(KeyCode.E) && grabbing == false && canPressE)
             {
 
@@ -112,13 +109,6 @@ public class CameraControl : MonoBehaviour
                 rb.constraints = RigidbodyConstraints.None;
                 rb = null;
             }
-
-
-            //if (rb != null)
-            //{
-            //    rb.velocity = (endOfRay - rb.position) * (carrySpeed * Time.deltaTime);
-            //}
-
 
 
             if (Input.GetMouseButtonDown(0) && grabbing)
@@ -162,3 +152,4 @@ public class CameraControl : MonoBehaviour
 
 
 }
+
